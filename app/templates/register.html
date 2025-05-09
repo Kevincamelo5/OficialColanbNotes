@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container login-card">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          Crear una cuenta
+        </p>
+      </header>
+      <div class="card-content">
+        <form method="POST">
+          <div class="field">
+            <label class="label" for="username">Nombre de usuario:</label>
+            <div class="control">
+              <input
+                class="input"
+                type="text"
+                name="username"
+                id="username"
+                placeholder="Ingresa tu nombre de usuario"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="email">Correo electrónico:</label>
+            <div class="control">
+              <input
+                class="input"
+                type="email"
+                name="email"
+                id="email"
+                placeholder="Ingresa tu correo electrónico"
+                required
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="password">Contraseña:</label>
+            <div class="control">
+              <input
+                class="input"
+                type="password"
+                name="password"
+                id="password"
+                placeholder="Crea una contraseña"
+                required
+              />
+            </div>
+          </div>
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <button type="submit" class="button is-primary">Registrar</button>
+            </div>
+          </div>
+        </form>
+        <p class="has-text-centered">
+          ¿Ya tienes cuenta? <a href="{{ url_for('main.login') }}">Inicia sesión</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

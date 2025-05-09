@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Mis Notas{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          Mis Notas 📝
+        </p>
+      </header>
+      <div class="card-content">
+        <div class="field has-text-centered">
+          <div class="control">
+            <a href="{{ url_for('main.create_note') }}" class="button is-primary">
+              Crear Nueva Nota +
+            </a>
+          </div>
+        </div>
+        {% if notes %}
+        <ul class="list">
+          {% for note in notes %}
+          <li class="box is-flex is-justify-content-space-between is-align-items-center">
+            <strong>{{ note.title }}</strong>
+            <div class="buttons">
+              <a
+                href="{{ url_for('main.view_note', note_id=note.id) }}"
+                class="button is-small is-link"
+              >
+                Ver nota
+              </a>
+              <form
+                method="POST"
+                action="{{ url_for('main.delete_note', note_id=note.id) }}"
+                style="display: inline"
+              >
+                <button
+                  type="submit"
+                  class="button is-small is-danger"
+                  onclick="return confirm('¿Estás seguro de que quieres eliminar esta nota?');"
+                >
+                  Eliminar
+                </button>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+        {% else %}
+        <p class="has-text-centered has-text-grey">
+          No tienes notas guardadas.
+        </p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

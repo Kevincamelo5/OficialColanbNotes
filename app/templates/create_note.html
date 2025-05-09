@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Nota{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          Crear Nueva Nota
+        </p>
+      </header>
+      <div class="card-content">
+        <form method="POST" action="{{ url_for('main.create_note') }}">
+          <div class="field">
+            <label class="label" for="title">Título:</label>
+            <div class="control">
+              <input
+                class="input"
+                name="title"
+                id="title"
+                type="text"
+                placeholder="Título de la nota"
+                required
+                minlength="3"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="content">Contenido:</label>
+            <div class="control">
+              <textarea
+                class="textarea"
+                name="content"
+                id="content"
+                rows="10"
+                placeholder="Contenido de la nota"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="field is-grouped is-grouped-right">
+            <div class="control">
+              <button type="submit" class="button is-primary">Guardar Nota</button>
+            </div>
+            <div class="control">
+              <a href="{{ url_for('main.view_notes') }}" class="button is-light">
+                Cancelar
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

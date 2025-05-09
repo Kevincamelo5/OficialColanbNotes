@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Detalles de la Nota{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          {{ note.title }}
+        </p>
+      </header>
+      <div class="card-content">
+        <p class="content">{{ note.content }}</p>
+      </div>
+      <footer class="card-footer">
+        <div class="card-footer-item">
+          <a href="{{ url_for('main.view_notes') }}" class="button is-primary">
+            Volver a Mis Notas
+          </a>
+        </div>
+      </footer>
+    </div>
+  </div>
+</section>
+{% endblock %}

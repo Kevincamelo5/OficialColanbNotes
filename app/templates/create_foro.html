@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Foro{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          Crear Nuevo Foro
+        </p>
+      </header>
+      <div class="card-content">
+        <form method="POST" action="{{ url_for('main.create_foro') }}">
+          <div class="field">
+            <label class="label" for="title">Título:</label>
+            <div class="control">
+              <input
+                class="input"
+                name="title"
+                id="title"
+                type="text"
+                placeholder="Título del foro"
+                required
+                minlength="3"
+              />
+            </div>
+          </div>
+          <div class="field">
+            <label class="label" for="description">Descripción:</label>
+            <div class="control">
+              <textarea
+                class="textarea"
+                name="description"
+                id="description"
+                rows="5"
+                placeholder="Descripción del foro"
+                required
+              ></textarea>
+            </div>
+          </div>
+          <div class="field is-grouped is-grouped-right">
+            <div class="control">
+              <button type="submit" class="button is-primary">Guardar Foro</button>
+            </div>
+            <div class="control">
+              <a href="{{ url_for('main.view_foros') }}" class="button is-light">
+                Cancelar
+              </a>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

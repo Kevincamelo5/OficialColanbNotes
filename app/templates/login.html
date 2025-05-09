@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Iniciar Sesión{% endblock %}
+{% block content %}
+<section class="section">
+  <div class="container login-card">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-centered">
+          Iniciar Sesión
+        </p>
+      </header>
+      <div class="card-content">
+        <form method="POST">
+          <div class="field">
+            <label class="label">Correo institucional</label>
+            <div class="control">
+              <input class="input" type="email" name="email" required />
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Contraseña</label>
+            <div class="control">
+              <input class="input" type="password" name="password" required />
+            </div>
+          </div>
+
+          <div class="field is-grouped is-grouped-centered">
+            <div class="control">
+              <button type="submit" class="button is-primary">Entrar</button>
+            </div>
+          </div>
+        </form>
+        <p class="has-text-centered mt-4">
+          ¿No tienes una cuenta?
+          <a href="{{ url_for('main.register') }}">Regístrate aquí</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

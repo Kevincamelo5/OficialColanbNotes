@@ -1,0 +1,45 @@
+body {
+    background: #e0f7fa;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+    background-color: #0277bd;
+}
+
+.navbar a {
+    color: #fff;
+}
+
+.card {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #1991c9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    background-color: #A8F1FF;
+}
+
+.btn-primary {
+    background-color: #0288d1;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #0277bd;
+}
+
+.login-card {
+    margin-right: 22em;
+    margin-left: 22em;
+}
+
+.bg-theme {
+    background-color: #f6f6fc;
+    opacity: 1;
+    background: radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent), radial-gradient(circle, transparent 20%, #e5e5f7 20%, #e5e5f7 80%, transparent 80%, transparent) 25px 25px, linear-gradient(#6FE6FC 2px, transparent 2px) 0 -1px, linear-gradient(90deg, #6FE6FC 2px, #e5e5f7 2px) -1px 0;
+    background-size: 50px 50px, 50px 50px, 25px 25px, 25px 25px;
+}

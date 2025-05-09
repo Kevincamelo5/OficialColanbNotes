@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}Panel Principal{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="container">
+    <div class="card">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-4">
+          ¡Bienvenido, {{ current_user.username }}!
+        </p>
+      </header>
+      <div class="card-content">
+        <p class="has-text-centered">
+          Este es tu panel principal. Desde aquí pronto podrás:
+        </p>
+        <ul class="content">
+          <li><a href="{{ url_for('main.view_notes') }}">Ver y crear notas</a></li>
+          <li><a href="{{ url_for('main.view_foros') }}">Participar en foros</a></li>
+          <li>Conectar con otros usuarios</li>
+        </ul>
+        <div class="box">
+          <h3 class="is-size-5">Contactos</h3>
+          {% if contacts %}
+          <ul class="list">
+            {% for contact in contacts %}
+            <li class="box is-flex is-justify-content-space-between is-align-items-center">
+              <span>{{ contact.username }}</span>
+              <form
+                action="{{ url_for('main.remove_contact', user_id=contact.id) }}"
+                method="POST"
+                style="display: inline"
+              >
+                <button type="submit" class="button is-small is-danger">Eliminar</button>
+              </form>
+            </li>
+            {% endfor %}
+          </ul>
+          {% else %}
+          <p class="has-text-centered has-text-grey">
+            No tienes contactos aún. ¡Conéctate con otros usuarios!
+          </p>
+          {% endif %}
+        </div>
+        <p class="has-text-centered has-text-grey">
+          <em>ColabNotes: tu conocimiento en comunidad</em> 🌟
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

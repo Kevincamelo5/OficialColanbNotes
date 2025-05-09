@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ColabNotes - {% block title %}{% endblock %}</title>
+
+    <!-- Bulma CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+    />
+
+    <!-- Estilos personalizados (opcional) -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar is-info" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="{{ url_for('main.dashboard') }}">
+          📘 ColabNotes
+        </a>
+      </div>
+
+      <div class="navbar-menu">
+        <div class="navbar-end">
+          {% if current_user.is_authenticated %}
+          <div class="navbar-item">
+            <figure class="image is-36x36" style="margin-right: 5px;">
+              <img
+                class="is-rounded"
+                src="https://xsgames.co/randomusers/assets/avatars/male/23.jpg"
+                alt="Foto de perfil"
+              />
+            </figure>
+            <a class="navbar-item is-link" href="{{ url_for('main.logout') }}">
+              Cerrar sesión
+            </a>
+          </div>
+          {% else %}
+          <a class="navbar-item" href="{{ url_for('main.login') }}">
+            Iniciar sesión
+          </a>
+          <a class="navbar-item" href="{{ url_for('main.register') }}">
+            Registrarse
+          </a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <section class="section bg-theme" style="height: 100vh;">
+      <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="notification is-{{ category }}">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </div>
+    </section>
+  </body>
+</html>
