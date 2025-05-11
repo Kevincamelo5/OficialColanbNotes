@@ -10,6 +10,20 @@
         <p class="card-header-title has-text-centered is-size-4">
           Foros disponibles
         </p>
+        <!-- Barra de búsqueda -->
+        <div class="card-header-icon">
+          <form method="GET" action="{{ url_for('main.all_foros') }}" class="field has-addons">
+            <div class="control">
+              <input class="input" type="text" name="query" placeholder="Buscar foro..."
+                value="{{ request.args.get('query', '') }}">
+            </div>
+            <div class="control">
+              <button type="submit" class="button is-info">
+                Buscar
+              </button>
+            </div>
+          </form>
+        </div>
       </header>
       <div class="card-content">
         <div class="field has-text-centered">
@@ -26,11 +40,7 @@
             <li class="box">
               <strong class="is-size-5">{{ foro.title }}</strong>
               <p class="is-size-6">{{ foro.description }}</p>
-              <form
-                method="POST"
-                action="{{ url_for('main.join_foro', foro_id=foro.id) }}"
-                style="display: inline"
-              >
+              <form method="POST" action="{{ url_for('main.join_foro', foro_id=foro.id) }}" style="display: inline">
                 <button type="submit" class="button is-small is-success">
                   Unirse
                 </button>

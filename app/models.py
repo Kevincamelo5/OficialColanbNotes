@@ -1,6 +1,7 @@
 from app import db, login_manager
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from datetime import datetime
 
 user_foro = db.Table(
     'user_foro',
@@ -28,13 +29,42 @@ class User(db.Model, UserMixin):
 
     foros = db.relationship('Foro', secondary=user_foro, backref=db.backref('user_participants', lazy='dynamic'), lazy='dynamic')
 
+     # Relaciones para solicitudes de amistad
+    sent_friend_requests = db.relationship(
+        'FriendRequest',
+        foreign_keys='FriendRequest.sender_id',
+        back_populates='sender',
+        lazy=True
+    )
+    received_friend_requests = db.relationship(
+        'FriendRequest',
+        foreign_keys='FriendRequest.receiver_id',
+        back_populates='receiver',
+        lazy=True
+    )
+
     contacts = db.relationship(
-        'User', 
-        secondary=user_contacts, 
-        primaryjoin=(user_contacts.c.user_id == id), 
-        secondaryjoin=(user_contacts.c.contact_id == id), 
-        backref=db.backref('participants', lazy='dynamic'), 
-        lazy='dynamic')
+    'User', 
+    secondary=user_contacts, 
+    primaryjoin=(user_contacts.c.user_id == id), 
+    secondaryjoin=(user_contacts.c.contact_id == id), 
+    backref=db.backref('friends', lazy='dynamic'), 
+    lazy='dynamic'
+)
+    
+    # Relaciones para mensajes privados
+    sent_messages = db.relationship(
+        'PrivateMessage',
+        foreign_keys='PrivateMessage.sender_id',
+        backref='sender_user',
+        lazy=True
+    )
+    received_messages = db.relationship(
+        'PrivateMessage',
+        foreign_keys='PrivateMessage.receiver_id',
+        backref='receiver_user',
+        lazy=True
+    )
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -67,3 +97,24 @@ class Message(db.Model):
     foro_id = db.Column(db.Integer, db.ForeignKey('foro.id'), nullable=False)
 
     user = db.relationship('User', backref='messages')
+
+class FriendRequest(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    status = db.Column(db.String(20), default='pending')  # 'pending', 'accepted', 'rejected'
+
+    # Relaciones inversas
+    sender = db.relationship('User', foreign_keys=[sender_id], back_populates='sent_friend_requests')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], back_populates='received_friend_requests')
+
+class PrivateMessage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.Text, nullable=False)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # Marca de tiempo del mensaje
+
+     # Relaciones inversas
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_private_messages')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_private_messages')

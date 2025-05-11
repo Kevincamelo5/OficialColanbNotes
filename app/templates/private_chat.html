@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Chat Privado con {{ other_user.username }}{% endblock %}
+{% block content %}
+<div class="card">
+    <h2 class="text-center">Chat Privado con {{ other_user.username }}</h2>
+
+    <!-- Lista de mensajes -->
+    <div class="chat-box" style="max-height: 400px; overflow-y: auto;">
+        {% if messages %}
+        <ul class="list-group">
+            {% for message in messages %}
+            <li
+                class="list-group-item {% if message.sender_id == current_user.id %}text-end{% else %}text-start{% endif %}">
+                <strong>{{ message.sender.username }}</strong>:
+                <small>{{ message.timestamp.strftime('%Y-%m-%d %H:%M') }}</small><br>
+                <p>{{ message.content }}</p>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>No hay mensajes aún.</p>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <!-- Formulario para enviar mensajes -->
+    <form method="POST" action="{{ url_for('main.private_chat', user_id=other_user.id) }}">
+        <div class="form-group">
+            <label>Mensaje:</label>
+            <textarea name="content" rows="3" class="form-control" placeholder="Escribe tu mensaje aquí..."
+                required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Enviar</button>
+    </form>
+</div>
+{% endblock %}

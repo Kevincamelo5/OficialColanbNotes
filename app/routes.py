@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from app import db
-from app.models import User, Foro, Note, Message
+from app.models import User, Foro, Note, Message, FriendRequest, PrivateMessage
 from flask_login import login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -117,6 +117,39 @@ def view_note(note_id):
     # Renderizar la plantilla con los detalles de la nota
     return render_template('view_note.html', note=note)
 
+@main.route('/edit_note/<int:note_id>', methods=['GET', 'POST'])
+@login_required
+def edit_note(note_id):
+    #buscar la nota por su id
+    note = Note.query.get_or_404(note_id)
+
+    #verificar que la nota pertenezca al usuario actual
+    if note.user_id != current_user.id:
+        flash('No tienes permiso para editar esta nota.', 'danger')
+        return redirect(url_for('main.view_notes'))
+    
+    if request.method == 'POST':
+        #obtener los datos del formulario
+        new_title = request.form.get('title')
+        new_content = request.form.get('content')
+
+        if not new_title or not new_content:
+            flash('Por favor, completa todos los campos.', 'danger')
+            return redirect(url_for('main.edit_note', note_id=note.id))
+        
+        try:
+            note.title = new_title
+            note.content = new_content
+            db.session.commit()
+            flash("Nota actualizada con exito.", 'success')
+            return redirect(url_for('main.view_note', note_id=note.id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'ocurrio un error al actualizar la nota: {str(e)}', 'danger')
+            print(e) #para depuracion
+
+    return render_template('edit_note.html', note=note)
+
 @main.route('/create_foro', methods=['GET', 'POST'])
 @login_required
 def create_foro():
@@ -222,9 +255,27 @@ def view_foro(foro_id):
 @main.route('/all_foros')
 @login_required
 def all_foros():
-    #obtener todos los foros disponibles
-    foros = Foro.query.all()
-    return render_template('all_foros.html', foros=foros)
+
+    # Verificar si el usuario está autenticado
+    if not current_user.is_authenticated:
+        flash('Debes iniciar sesión para ver los foros.', 'danger')
+        return redirect(url_for('main.login'))
+    
+     #obtener el termino de busqueda del parametro query
+    query = request.args.get('query', '').strip()
+    if query:
+        # Filtrar los foros por el término de búsqueda
+        all_foros = Foro.query.filter((Foro.title.ilike(f'%{query}%')) | (Foro.description.ilike(f'%{query}'))).all()
+    else:
+        all_foros = Foro.query.all()
+    
+    # Obtener los foros en los que el usuario ya está participando
+    user_foros = current_user.foros.all()
+    
+    # Filtrar los foros disponibles excluyendo los que el usuario ya está participando
+    available_foros = [foro for foro in all_foros if foro not in user_foros]
+    
+    return render_template('all_foros.html', foros=available_foros)
 
 @main.route('/add_contact/<int:user_id>', methods=['POST'])
 @login_required
@@ -255,3 +306,126 @@ def remove_contact(user_id):
         flash(f'{user_to_remove.username} ha sido eliminado de tus contactos.', 'success')
 
     return redirect(url_for('main.dashboard'))
+
+@main.route('/search_users', methods=['GET', 'POST'])
+@login_required
+def search_users():
+    query = request.args.get('query', '').strip()
+    if query:
+        users = User.query.filter(
+            (User.username.ilike(f'%{query}%')) | (User.email.ilike(f'%{query}%'))
+        ).all()
+    else:
+        users = []
+    return render_template('search_users.html', users=users, query=query)
+
+@main.route('/send_friend_request/<int:user_id>', methods=['POST'])
+@login_required
+def send_friend_request(user_id):
+    user_to_add = User.query.get_or_404(user_id)
+    if user_to_add == current_user:
+        flash('No puedes enviarte una solicitud de amistad a ti mismo.', 'info')
+        return redirect(url_for('main.dashboard'))
+    
+    # Verificar si el usuario ya es un contacto
+    if user_to_add in current_user.contacts.all():
+        flash(f'{user_to_add.username} ya es uno de tus contactos.', 'info')
+        return redirect(url_for('main.dashboard'))
+    
+    # Verificar si ya existe una solicitud pendiente
+    existing_request = FriendRequest.query.filter_by(
+        sender_id=current_user.id,
+        receiver_id=user_to_add.id,
+        status='pending'
+    ).first()
+    if existing_request:
+        flash('Ya has enviado una solicitud de amistad a este usuario.', 'info')
+        return redirect(url_for('main.dashboard'))
+    
+    # Crear nueva solicitud
+    new_request = FriendRequest(sender_id=current_user.id, receiver_id=user_to_add.id)
+    db.session.add(new_request)
+    db.session.commit()
+    flash(f'Solicitud de amistad enviada a {user_to_add.username}.', 'success')
+    return redirect(url_for('main.dashboard'))
+
+
+@main.route('/accept_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def accept_friend_request(request_id):
+    # Obtener la solicitud por su ID
+    friend_request = FriendRequest.query.get_or_404(request_id)
+    
+    # Verificar si el usuario actual es el receptor de la solicitud
+    if friend_request.receiver != current_user:
+        flash('No tienes permiso para aceptar esta solicitud.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    # Aceptar la solicitud
+    friend_request.status = 'accepted'
+    
+    # Agregar al remitente como contacto del receptor y viceversa
+    current_user.contacts.append(friend_request.sender)
+    friend_request.sender.contacts.append(current_user)
+    
+    # Eliminar la solicitud de la base de datos (opcional)
+    db.session.delete(friend_request)
+    
+    # Confirmar los cambios
+    db.session.commit()
+    
+    flash(f'Ahora eres amigo de {friend_request.sender.username}.', 'success')
+    return redirect(url_for('main.dashboard'))
+
+
+@main.route('/reject_friend_request/<int:request_id>', methods=['POST'])
+@login_required
+def reject_friend_request(request_id):
+    friend_request = FriendRequest.query.get_or_404(request_id)
+    if friend_request.receiver != current_user:
+        flash('No tienes permiso para rechazar esta solicitud.', 'danger')
+        return redirect(url_for('main.dashboard'))
+    
+    # Rechazar la solicitud
+    friend_request.status = 'rejected'
+
+    db.session.delete(friend_request)
+
+    db.session.commit()
+    flash(f'Solicitud de amistad rechazada.', 'info')
+    return redirect(url_for('main.dashboard'))
+
+@main.route('/private_chat/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def private_chat(user_id):
+    # Obtener el usuario con quien se está chateando
+    other_user = User.query.get_or_404(user_id)
+    
+    # Verificar si el usuario está en los contactos del usuario actual
+    if other_user not in current_user.contacts.all():
+        flash('Debes agregar a este usuario como contacto para chatear.', 'info')
+        return redirect(url_for('main.dashboard'))
+    
+    # Obtener todos los mensajes entre los dos usuarios
+    messages = PrivateMessage.query.filter(
+        ((PrivateMessage.sender_id == current_user.id) & (PrivateMessage.receiver_id == other_user.id)) |
+        ((PrivateMessage.sender_id == other_user.id) & (PrivateMessage.receiver_id == current_user.id))
+    ).order_by(PrivateMessage.timestamp.asc()).all()
+    
+    if request.method == 'POST':
+        content = request.form.get('content')
+        if not content:
+            flash('El mensaje no puede estar vacío.', 'danger')
+        else:
+            # Crear un nuevo mensaje
+            new_message = PrivateMessage(
+                content=content,
+                sender_id=current_user.id,
+                receiver_id=other_user.id
+            )
+            db.session.add(new_message)
+            db.session.commit()
+            flash('Mensaje enviado.', 'success')
+            return redirect(url_for('main.private_chat', user_id=user_id))
+    
+    return render_template('private_chat.html', other_user=other_user, messages=messages)

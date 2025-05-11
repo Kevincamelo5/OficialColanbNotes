@@ -32,12 +32,18 @@
             </div>
           </div>
           {% endfor %}
+          {% else %}
+          <p class="has-text-centered">No participas en ningún foro.</p>
+          {% endif %}
+          <div class="card-content">
+            <div class="has-text-centered">
+              <a href="{{ url_for('main.all_foros') }}" class="button is-primary">
+                inscribirte a más foros
+              </a>
+            </div>
+          </div>
         </div>
-        {% else %}
-        <p class="has-text-centered">No participas en ningún foro.</p>
-        {% endif %}
       </div>
     </div>
-  </div>
 </section>
 {% endblock %}

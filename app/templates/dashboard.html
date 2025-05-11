@@ -13,13 +13,19 @@
       </header>
       <div class="card-content">
         <p class="has-text-centered">
-          Este es tu panel principal. Desde aquí pronto podrás:
+          Este es tu panel principal. Desde aquí podrás:
         </p>
         <ul class="content">
           <li><a href="{{ url_for('main.view_notes') }}">Ver y crear notas</a></li>
           <li><a href="{{ url_for('main.view_foros') }}">Participar en foros</a></li>
-          <li>Conectar con otros usuarios</li>
+          <li><a href="{{ url_for('main.search_users') }}">Buscar y recibir solicitudes de amistad de otros
+              estudiantes</a></li>
         </ul>
+
+        <div>
+          <h2 id="">Hablar en privado con otros usuarios</h2>
+        </div>
+
         <div class="box">
           <h3 class="is-size-5">Contactos</h3>
           {% if contacts %}
@@ -27,11 +33,10 @@
             {% for contact in contacts %}
             <li class="box is-flex is-justify-content-space-between is-align-items-center">
               <span>{{ contact.username }}</span>
-              <form
-                action="{{ url_for('main.remove_contact', user_id=contact.id) }}"
-                method="POST"
-                style="display: inline"
-              >
+              <form action="{{ url_for('main.remove_contact', user_id=contact.id) }}" method="POST"
+                style="display: inline">
+                <a href="{{ url_for('main.private_chat', user_id=contact.id) }}"
+                  class="btn btn-sm btn-primary float-end">Chat</a>
                 <button type="submit" class="button is-small is-danger">Eliminar</button>
               </form>
             </li>
