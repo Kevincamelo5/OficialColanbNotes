@@ -27,9 +27,15 @@ class User(db.Model, UserMixin):
 
     notes = db.relationship('Note', backref='author', lazy=True)
 
-    foros = db.relationship('Foro', secondary=user_foro, backref=db.backref('user_participants', lazy='dynamic'), lazy='dynamic')
+    foros = db.relationship(
+        'Foro',
+        secondary=user_foro,
+        backref=db.backref('user_participants', lazy='dynamic', overlaps="forum_foros,participants"),
+        lazy='dynamic',
+        overlaps="forum_foros,participants"
+    )
 
-     # Relaciones para solicitudes de amistad
+    # Relaciones para solicitudes de amistad
     sent_friend_requests = db.relationship(
         'FriendRequest',
         foreign_keys='FriendRequest.sender_id',
@@ -44,13 +50,13 @@ class User(db.Model, UserMixin):
     )
 
     contacts = db.relationship(
-    'User', 
-    secondary=user_contacts, 
-    primaryjoin=(user_contacts.c.user_id == id), 
-    secondaryjoin=(user_contacts.c.contact_id == id), 
-    backref=db.backref('friends', lazy='dynamic'), 
-    lazy='dynamic'
-)
+        'User', 
+        secondary=user_contacts, 
+        primaryjoin=(user_contacts.c.user_id == id), 
+        secondaryjoin=(user_contacts.c.contact_id == id), 
+        backref=db.backref('friends', lazy='dynamic'), 
+        lazy='dynamic'
+    )
     
     # Relaciones para mensajes privados
     sent_messages = db.relationship(
@@ -85,7 +91,13 @@ class Foro(db.Model):
     title = db.Column(db.String(100), nullable=False)
     description = db.Column(db.Text, nullable=False)
 
-    participants = db.relationship('User', secondary=user_foro, backref=db.backref('forum_foros', lazy='dynamic'), lazy='dynamic')
+    participants = db.relationship(
+        'User',
+        secondary=user_foro,
+        backref=db.backref('forum_foros', lazy='dynamic', overlaps="foros,user_participants"),
+        lazy='dynamic',
+        overlaps="foros,user_participants"
+    )
 
     messages = db.relationship('Message', backref='foro', lazy=True)
 
@@ -115,6 +127,6 @@ class PrivateMessage(db.Model):
     receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)  # Marca de tiempo del mensaje
 
-     # Relaciones inversas
+    # Relaciones inversas
     sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_private_messages')
     receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_private_messages')
