@@ -3,21 +3,42 @@
 {% block title %}Editar Nota{% endblock %}
 
 {% block content %}
-<div class="card">
-    <h2 class="text-center">Editar Nota</h2>
-    <form method="POST" action="{{ url_for('main.edit_note', note_id=note.id) }}">
-        <div class="form-group">
-            <label for="title">Título:</label>
-            <input name="title" id="title" type="text" class="form-control" value="{{ note.title }}" required
-                minlength="3">
+<section class="section">
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title has-text-centered">
+                    Editar Nota
+                </p>
+            </header>
+            <div class="card-content">
+                <form method="POST" action="{{ url_for('main.edit_note', note_id=note.id) }}">
+                    <div class="field">
+                        <label class="label" for="title">Título:</label>
+                        <div class="control">
+                            <input name="title" id="title" type="text" class="input" value="{{ note.title }}" required
+                                minlength="3">
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label class="label" for="content">Contenido:</label>
+                        <div class="control">
+                            <textarea name="content" id="content" rows="10" class="textarea"
+                                required>{{ note.content }}</textarea>
+                        </div>
+                    </div>
+                    <div class="field is-grouped is-justify-content-space-between">
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Guardar Cambios</button>
+                        </div>
+                        <div class="control">
+                            <a href="{{ url_for('main.view_note', note_id=note.id) }}"
+                                class="button is-light">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Contenido:</label>
-            <textarea name="content" id="content" rows="10" class="form-control" required>{{ note.content }}</textarea>
-        </div>
-        <br>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        <a href="{{ url_for('main.view_note', note_id=note.id) }}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
+    </div>
+</section>
 {% endblock %}
