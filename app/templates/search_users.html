@@ -1,57 +1,88 @@
 {% extends "base.html" %}
 {% block title %}Buscar Usuarios{% endblock %}
+
 {% block content %}
-<div class="card">
-    <h2 class="text-center">Buscar Usuarios</h2>
-    <form method="GET" action="{{ url_for('main.search_users') }}" class="mb-3">
-        <div class="input-group">
-            <input type="text" name="query" class="form-control" placeholder="Buscar por nombre o correo"
-                value="{{ query }}">
-            <button type="submit" class="btn btn-primary">Buscar</button>
+<section class="section">
+    <div class="container">
+        <div class="card">
+            <header class="card-header">
+                <p class="card-header-title has-text-centered">
+                    Buscar Usuarios
+                </p>
+            </header>
+            <div class="card-content">
+                <form method="GET" action="{{ url_for('main.search_users') }}">
+                    <div class="field has-addons">
+                        <div class="control is-expanded">
+                            <input type="text" name="query" class="input" placeholder="Buscar por nombre o correo"
+                                value="{{ query }}">
+                        </div>
+                        <div class="control">
+                            <button type="submit" class="button is-primary">Buscar</button>
+                        </div>
+                    </div>
+                </form>
+
+                {% if users %}
+                <ul class="list">
+                    {% for user in users %}
+                    <li class="box">
+                        <div class="is-flex is-justify-content-space-between is-align-items-center">
+                            <span>{{ user.username }} ({{ user.email }})</span>
+                            <div>
+                                {% if user != current_user %}
+                                {% if user not in current_user.contacts.all() %}
+                                <form method="POST" action="{{ url_for('main.send_friend_request', user_id=user.id) }}"
+                                    style="display:inline;">
+                                    <button type="submit" class="button is-small is-success">Enviar Solicitud</button>
+                                </form>
+                                {% else %}
+                                <span class="tag is-light">Ya es un contacto</span>
+                                {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="has-text-centered">No se encontraron usuarios.</p>
+                {% endif %}
+            </div>
         </div>
-    </form>
 
-    {% if users %}
-    <ul class="list-group">
-        {% for user in users %}
-        <li class="list-group-item d-flex justify-content-between align-items-center">
-            {{ user.username }} ({{ user.email }})
-
-            {% if user != current_user %}
-            {% if user not in current_user.contacts.all() and user != current_user %}
-            <form method="POST" action="{{ url_for('main.send_friend_request', user_id=user.id) }}"
-                style="display:inline;">
-                <button type="submit" class="btn btn-sm btn-success">Enviar Solicitud</button>
-            </form>
-            {% endif %}
-            <span class="text-muted">Ya es un contacto</span>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <p class="text-center">No se encontraron usuarios.</p>
-    {% endif %}
-
-    <div class="box">
-        <h3>Solicitudes de amistad</h3>
-        {% if current_user.received_friend_requests %}
-        <ul class="list">
-            {% for request in current_user.received_friend_requests %}
-            <span>{{ request.sender.username}}</span>
-            <form method="POST" action="{{ url_for('main.accept_friend_request', request_id=request.id) }}">
-                <button type="submit" class="button is-small is-danger">Aceptar</button>
-            </form>
-            <form method="POST" action="{{ url_for('main.reject_friend_request', request_id=request.id) }}">
-                <button type="submit" class="button is-small is-danger">Rechazar</button>
-            </form>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p>No cuentas con niguna solictud de amistad</p>
-        {% endif %}
+        <div class="card mt-5">
+            <header class="card-header">
+                <p class="card-header-title has-text-centered">
+                    Solicitudes de Amistad
+                </p>
+            </header>
+            <div class="card-content">
+                {% if current_user.received_friend_requests %}
+                <ul class="list">
+                    {% for request in current_user.received_friend_requests %}
+                    <li class="box">
+                        <div class="is-flex is-justify-content-space-between is-align-items-center">
+                            <span>{{ request.sender.username }}</span>
+                            <div class="buttons">
+                                <form method="POST"
+                                    action="{{ url_for('main.accept_friend_request', request_id=request.id) }}">
+                                    <button type="submit" class="button is-small is-primary">Aceptar</button>
+                                </form>
+                                <form method="POST"
+                                    action="{{ url_for('main.reject_friend_request', request_id=request.id) }}">
+                                    <button type="submit" class="button is-small is-danger">Rechazar</button>
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="has-text-centered">No cuentas con ninguna solicitud de amistad.</p>
+                {% endif %}
+            </div>
+        </div>
     </div>
-
-</div>
+</section>
 {% endblock %}
