@@ -4,6 +4,14 @@
 
 ---
 
+# 🧑‍🤝‍🧑 integrantes
+
+- Kevin Leandro Camelo Suaste.
+- Roger Aguila Uicab.
+- Miguel Angel Gomez Hergera.
+- Diego Alexander Rosado Valle.
+---
+
 ## 🚀 Características principales
 
 - Registro y autenticación de usuarios mediante correo institucional.
@@ -19,6 +27,11 @@
 - [Flask](https://flask.palletsprojects.com/)
 - [Flask-Login](https://flask-login.readthedocs.io/)
 - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/)
+
+---
+
+ ## Vistas de la interfaz de usuario
+
 
 ---
 
@@ -59,4 +72,5 @@ Sigue los pasos a continuación para ejecutar el proyecto localmente:
     ```bash
     python run.py
 
+    
 La aplicación estará disponible en http://localhost:5000.
