@@ -4,6 +4,14 @@
 
 ---
 
+# integrantes
+
+- Kevin Leandro Camelo Suaste.
+- Roger Aguila Uicab.
+- Miguel Angel Gomez Hergera.
+- Diego Alexander Rosado Valle.
+---
+
 ## 🚀 Características principales
 
 - Registro y autenticación de usuarios mediante correo institucional.
