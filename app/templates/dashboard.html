@@ -21,24 +21,31 @@
           <li><a href="{{ url_for('main.search_users') }}">Buscar y recibir solicitudes de amistad de otros
               estudiantes</a></li>
         </ul>
+      </div>
+    </div>
 
-        <div>
-          <h2 id="">Hablar en privado con otros usuarios</h2>
-        </div>
-
+    <div class="card mt-5">
+      <header class="card-header">
+        <p class="card-header-title has-text-centered is-size-5">
+          Hablar en privado con otros usuarios
+        </p>
+      </header>
+      <div class="card-content">
+        <h3 class="is-size-5 mb-3">Contactos</h3>
         <div class="box">
-          <h3 class="is-size-5">Contactos</h3>
           {% if contacts %}
           <ul class="list">
             {% for contact in contacts %}
             <li class="box is-flex is-justify-content-space-between is-align-items-center">
               <span>{{ contact.username }}</span>
-              <form action="{{ url_for('main.remove_contact', user_id=contact.id) }}" method="POST"
-                style="display: inline">
+              <div class="buttons">
                 <a href="{{ url_for('main.private_chat', user_id=contact.id) }}"
-                  class="btn btn-sm btn-primary float-end">Chat</a>
-                <button type="submit" class="button is-small is-danger">Eliminar</button>
-              </form>
+                  class="button is-small is-primary">Chat</a>
+                <form action="{{ url_for('main.remove_contact', user_id=contact.id) }}" method="POST"
+                  style="display: inline;">
+                  <button type="submit" class="button is-small is-danger">Eliminar</button>
+                </form>
+              </div>
             </li>
             {% endfor %}
           </ul>
@@ -48,7 +55,7 @@
           </p>
           {% endif %}
         </div>
-        <p class="has-text-centered has-text-grey">
+        <p class="has-text-centered has-text-grey mt-4">
           <em>ColabNotes: tu conocimiento en comunidad</em> 🌟
         </p>
       </div>
