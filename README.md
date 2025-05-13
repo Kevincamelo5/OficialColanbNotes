@@ -67,8 +67,10 @@ Sigue los pasos a continuación para ejecutar el proyecto localmente:
     ```bash
     python run.py
 
+    --
+
     ## Vistas de la interfaz de usuario
 
-    #
-
+    --
+    
 La aplicación estará disponible en http://localhost:5000.
