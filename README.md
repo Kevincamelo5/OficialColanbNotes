@@ -4,7 +4,7 @@
 
 ---
 
-# 🫂 integrantes
+# 🧑‍🤝‍🧑 integrantes
 
 - Kevin Leandro Camelo Suaste.
 - Roger Aguila Uicab.
