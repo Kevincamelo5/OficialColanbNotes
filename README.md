@@ -35,7 +35,7 @@
 - ![Vista del inicio de sesion](imagenes/inicioDeSesion.jpg)
   *Vista del inicio de sesión del usuario.*
 - ![Vista registro de usuario](imagenes/RegistroUsario.jpg)
-  *Vista deñ registro de Usuario*
+  *Vista del registro de Usuario*
 - ![Vista del menu principal del usuario](imagenes/VistaPrincipal.jpg)
 *Vista del menú principal* 
 - ![Vista de todas las notas generadas](imagenes/PrimeraVistaDeNotas.jpg)
