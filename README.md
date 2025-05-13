@@ -32,28 +32,38 @@
 
  ## Vistas de la interfaz de usuario
 
-- ![Vista del inicio de sesion](imagenes/inicioDeSesion.jpg)
-  *Vista del inicio de sesión del usuario.*
-- ![Vista registro de usuario](imagenes/RegistroUsario.jpg)
-  *Vista del registro de Usuario*
-- ![Vista del menu principal del usuario](imagenes/VistaPrincipal.jpg)
-*Vista del menú principal* 
-- ![Vista de todas las notas generadas](imagenes/PrimeraVistaDeNotas.jpg)
-*Vista previa de las notas personales del usuario* 
-- ![vista detallada de la nota](imagenes/VistaDetalladaDeLaNota.jpg)
-*Vista detallada de una nota especifica* 
-- ![Vista de la edicion de la nota](imagenes/EdicionDeLaNota.jpg)
-*Vista de la edición de la nota generada* 
-- ![Vista general de los foros guardados](imagenes/VistaForos.jpg)
-*Vista previa de los foros a los que esta inscrito el usuario* 
-- ![Vista espececifica de la conversación dentro del foro](imagenes/VistaDentroForo.jpg)
-*Vista de una conversación de un foro* 
-- ![Vista general de la busqueda de foros para suscribirse](imagenes/VistaBuscarForos.jpg)
-*Vista previa de la busqueda de foros a los que el usuario no esta inscrito* 
-- ![Vista especifica de una conversación privada con un usuario de prueba](imagenes/VistaChatPrivado.jpg)
-*Vista dentro de una conversación privada con un usuario de prueba* 
-- ![Vista general de la busqueda de contactos y la aceptación de solicitudes de amistad](imagenes/VistaBuscarYAceptarContactos.jpg)
-*Vista previa de la busqueda de usuarios y recepción de solicitudes de amistad* 
+![Vista del inicio de sesion](imagenes/inicioDeSesion.jpg)
+ *Vista del inicio de sesión del usuario.*
+ 
+![Vista registro de usuario](imagenes/RegistroUsario.jpg)
+ *Vista del registro de Usuario.*
+ 
+![Vista del menu principal del usuario](imagenes/VistaPrincipal.jpg)
+*Vista del menú principal.* 
+
+![Vista de todas las notas generadas](imagenes/PrimeraVistaDeNotas.jpg)
+*Vista previa de las notas personales del usuario.* 
+
+![vista detallada de la nota](imagenes/VistaDetalladaDeLaNota.jpg)
+*Vista detallada de una nota especifica.* 
+
+![Vista de la edicion de la nota](imagenes/EdicionDeLaNota.jpg)
+*Vista de la edición de la nota generada.* 
+
+![Vista general de los foros guardados](imagenes/VistaForos.jpg)
+*Vista previa de los foros a los que esta inscrito el usuario.* 
+
+![Vista espececifica de la conversación dentro del foro](imagenes/VistaDentroForo.jpg)
+*Vista de una conversación de un foro.* 
+
+![Vista general de la busqueda de foros para suscribirse](imagenes/VistaBuscarForos.jpg)
+*Vista previa de la busqueda de foros a los que el usuario no esta inscrito.* 
+
+![Vista especifica de una conversación privada con un usuario de prueba](imagenes/VistaChatPrivado.jpg)
+*Vista dentro de una conversación privada con un usuario de prueba.* 
+
+![Vista general de la busqueda de contactos y la aceptación de solicitudes de amistad](imagenes/VistaBuscarYAceptarContactos.jpg)
+*Vista previa de la busqueda de usuarios y recepción de solicitudes de amistad.* 
 
 ---
 
